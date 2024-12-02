@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VU Lecture Viewer</title>
+    <style>
+        body,
+        html {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+                "Helvetica Neue", "Ubuntu";
+            background-color: black;
+            border-radius: 2px;
+        }
+        .popup{
+            /* background-image: url(./images.jpeg); */
+            background-repeat: no-repeat;
+            height: 200px;
+
+        }
+
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            width: 300px;
+            padding: 10px 12px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 6px 12px;
+            margin: 4px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #f1f1f1;
+            color: #333;
+            text-align: center;
+            text-decoration: none;
+            font-size: 14px;
+            float: right;
+            cursor: pointer;
+        }
+
+        .btn.hidden {
+            display: none;
+        }
+
+        .btn:disabled {
+            opacity: 0.7;
+            cursor: default;
+        }
+
+        .btn:not(:disabled):hover {
+            background-color: #ddd;
+        }
+
+        .btn.btn--full {
+            width: 100%;
+        }
+
+        h1 {
+            font-size: 14px;
+            font-weight: 500;
+            text-align: center;
+            color: white;
+        }
+
+        p {
+            font-size: 12px;
+            font-weight: 12px;
+            margin: 12px 0;
+            text-align: center;
+            color: #ccc;
+        }
+
+        p.leave-a-review {
+            font-size: 15px;
+            max-width: 95%;
+            margin: 8px auto;
+        }
+
+        hr {
+            margin-top: 8px;
+            border-color: transparent;
+            border-top-color: #00000029;
+        }
+
+        p.disclaimer {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="popup">
+        <h1>VU Firewall Bypass</h1>
+        <p>Version: v<span id="version-string">N/A</span></p>
+        <!-- <p>Learn: <a href="#">How to use this extension</a></p> -->
+
+        <!-- <button id="allow-events" class="btn btn--full">Allow Quiz Copy Paste</button> -->
+        <button id="bypass-video" class="btn btn--full">Mark Video As Viewed</button>
+        <!-- <button id="gdb-copy-paste" class="btn btn--full hidden" disabled>GDB Copy Paste Enabled</button> -->
+        <hr>
+        <button id="bypass-quiz" class="btn btn--full" >Lecture Quiz Bypass</button>
+        <button id="next-lecture" class="m-portlet__nav-link btn btn-secondary m-btn m-btn--air m-btn--icon m-btn--icon-only m-btn--pill">Next&gt;</button>
+        <!-- <a onclick="return SaveLogAndChangeTab(this,event);" id="lbtnNextLesson" class="m-portlet__nav-link btn btn-secondary m-btn m-btn--air m-btn--icon m-btn--icon-only m-btn--pill" href="javascript:__doPostBack('ctl00$MainContent$lbtnNextLesson','')">
+            <i class="fa fa-chevron-right">Next Page</i>
+        </a> -->
+
+        <!-- <p class="leave-a-review">If you liked this extension, please leave a review.</p> -->
+
+        <!-- <a class="btn btn--full"
+            href="https://chromewebstore.google.com/detail/vu-quiz-firewall-bypass-a/feooibaaamcllnmdojchjccjljdbdmfb/reviews"
+            target="_blank">
+            Rate this extension
+        </a> -->
+
+        <!-- <p class="disclaimer">
+            Disclaimer! Please focus on your study and never rely on such tools. Because it will not help you in future.
+        </p> -->
+    </div>
+
+    <script type="module" src="popup.js"></script>
+</body>
+</html>
