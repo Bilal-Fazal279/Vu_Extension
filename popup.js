@@ -217,10 +217,8 @@ function showMessage(e, t) {
         function: next,
       });
     });
-
-  
-
 });
+
 //Next Lecture End
 function next(){
   // Find the button by its ID
@@ -260,3 +258,165 @@ function bypassQuiz() {
     }
   });
 }
+
+
+
+//Code for quiz copying
+// let quizURL = window.location.href;
+const quizURL = await getActiveTab();
+console.log("quizURl iss:",quizURL.url);
+console.log("quizURl includes before iss :",quizURL.url.includes("Quiz"));
+if(!(quizURL.url.includes("Quiz")) ){
+  console.log("quizURl includes after iss:",quizURL.url.includes("Quiz"));
+  document.getElementById("quiz-button").setAttribute("disabled","true");
+}
+
+document.getElementById("quiz-button").addEventListener("click", () => {
+  // Get the textarea element by ID
+  // let newTextArea = document.getElementById("quiz-text");
+    
+  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    chrome.scripting.executeScript({
+      target: { tabId: tabs[0].id },
+      function: quiz,
+      // args: [newTextArea.value],
+    });
+  });
+  });
+
+function quiz(){ 
+
+      const allSpans = document.querySelectorAll('span'); // Select all div elements
+            const matchingElements = [];
+
+            allSpans.forEach(span => {
+                const computedStyle = window.getComputedStyle(span);
+                if (computedStyle.borderLeftColor === "rgb(38, 117, 158)") {
+                    matchingElements.push(span);
+                }
+            });
+        let v = matchingElements[0].innerHTML;
+        console.log(v);
+
+function trimerFunction(s){
+// Your variable containing the HTML string
+let htmlString = " ";
+
+// Step 1: Remove escape characters and trim whitespace
+htmlString = s.replace(/\\n/g, ' ').trim();
+
+// Step 2: Create a temporary DOM element to parse the HTML
+let tempDiv = document.createElement('div');
+tempDiv.innerHTML = htmlString;
+
+// Step 3: Extract the text content
+let extractedText = tempDiv.textContent || tempDiv.innerText || "";
+
+// Step 4: Trim the final result to remove any extra whitespace
+extractedText = extractedText.trim();
+
+console.log(extractedText); // Output: "In PL/SQL procedure, how many types of parameters can be used?"
+return extractedText;
+}
+
+let Question = trimerFunction(v);
+
+let mcq0 = document.getElementById("lblExpression0").innerHTML;
+mcq0 = trimerFunction(mcq0);
+
+let mcq1 = document.getElementById("lblExpression1").innerHTML;
+mcq1 = trimerFunction(mcq1);
+
+let mcq2 = document.getElementById("lblExpression2").innerHTML;
+mcq2 = trimerFunction(mcq2);
+
+let mcq3 = document.getElementById("lblExpression3").innerHTML;
+mcq3 = trimerFunction(mcq3);
+
+
+
+
+// Concatenate the question and multiple-choice answers
+let extractedText = Question + "\n 1. " + mcq0 + "\n 2. " + mcq1 + "\n 3. " + mcq2 + "\n 4. " + mcq3 + "\n";
+
+// // Get the textarea element by ID
+// let newTextArea = document.getElementById("quiz-text");
+// let newText = document.createElement("div");
+// newText.innerText = extractedText;
+// document.getElementById("div1").append(newText);
+
+
+  // Create the popup div
+  const popup = document.createElement('div');
+  popup.style.display = 'flex'; // Show the popup
+  popup.style.position = 'fixed'; // Stay in place
+  popup.style.zIndex = '1'; // Sit on top
+  popup.style.left = '0';
+  popup.style.top = '0';
+  popup.style.width = '100%'; // Full width
+  popup.style.height = '100%'; // Full height
+  popup.style.backgroundColor = 'rgba(0, 0, 0, 0.5)'; // Black background with opacity
+  popup.style.justifyContent = 'center'; // Center horizontally
+  popup.style.alignItems = 'center'; // Center vertically
+
+  // Create the content div
+  const popupContent = document.createElement('div');
+  popupContent.style.backgroundColor = 'white'; // White background
+  popupContent.style.padding = '20px';
+  popupContent.style.borderRadius = '5px';
+  popupContent.style.textAlign = 'center';
+
+  // Create the text to be copied
+  const textToCopy = document.createElement('p');
+  textToCopy.id = 'textToCopy';
+  // textToCopy.innerText = 'This is the text to be copied!';
+  textToCopy.innerText = extractedText;
+
+  // Create the copy button
+  const copyButton = document.createElement('button');
+  copyButton.innerText = 'Copy Text';
+  copyButton.addEventListener('click', function() {
+      const text = textToCopy.innerText;
+      navigator.clipboard.writeText(text).then(() => {
+          console.log('Text copied to clipboard!');
+          popup.style.display = 'none'; /////////////////////////////////
+      }).catch(err => {
+          console.error('Failed to copy: ', err);
+      });
+  });
+
+  // Create the close button
+  const closeButton = document.createElement('button');
+  closeButton.innerText = 'Close';
+  closeButton.style.marginLeft = "20px";
+  closeButton.addEventListener('click', function() {
+      document.body.removeChild(popup); // Remove the popup from the DOM
+  });
+
+  // Append elements to the popup content
+  popupContent.appendChild(textToCopy);
+  popupContent.appendChild(copyButton);
+  popupContent.appendChild(closeButton);
+
+  // Append content to the popup
+  popup.appendChild(popupContent);
+
+  // Append the popup to the body
+  document.body.appendChild(popup);
+
+
+return extractedText;
+};
+// let extracted = quiz();
+// newTextArea = document.getElementById("quiz-text");
+
+// // Check if the element exists before trying to set its value
+// if (newTextArea) {
+//     newTextArea.value = extractedText; // Use value for textarea
+//     console.log("newTextArea: ",newTextArea);
+// } else {
+//     console.error("Element with ID 'quiz-text' not found.");
+// }
+// let newTextArea = document.createElement("textarea");
+// newTextArea.value += extractedText; 
+// document.getElementById("div3").append(newTextArea);
