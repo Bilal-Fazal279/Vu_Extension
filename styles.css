@@ -4,6 +4,9 @@ html {
         "Helvetica Neue", "Ubuntu";
     /* background-color: rgb(53, 97, 119); */
     background-color: #087d72;
+    background-image: url(./background.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
     border-radius: 2px;
 }
 .popup{

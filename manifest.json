@@ -2,7 +2,8 @@
    "action": {
       
       "default_popup": "popup.html",
-      "default_icon":"./logo-icon.png"
+      "default_icon":"./download (1).png"
+      // "default_icon":"./logo-icon.png"
    },
   
    // "content_scripts": [ {
@@ -28,15 +29,15 @@
    // ,
    "description": "Enable copy paste on quiz and gdb pages, mark lesson videos as viewed, and bypass VU quiz firewall.",
    "host_permissions": [ "*://*.vu.edu.pk/*", "*://vu-db-worker.gptquiz.workers.dev/*" ],
-   // "icons": {
-   //    "128": "./icon-512.png",
-   //    "16": "./icon-256.png",
-   //    "48": "./icon-512.png"
-   // },
+   "icons": {
+      "128": "./download (1).png",
+      "16": "./download (1).png",
+      "48": "./download (1).png"
+   },
    // "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAhWEPLIx4FsuK63SkU5NNfgwIkja0OES9Eyjm/MwKJOk9GnIt7UhS5F12npaIRJh6ZQt3xyW9RRdNHYli5W39aHAjUOoZqa/4zAftgzfYgePzK3VUSRssyCd0Z7m5exs/UL0KT+WodXHClN/DaoD41Llg+0ZiyN/dXRDDI6mkzsXp8j7hzD2L8oI+G5jV1MQxOt8CWCnQrqmNekS2WZhSqrVY4o8IrV2VGGdIaSMx4GrizB7mr3c4V04fn9EXG8AC/NsTfrXzuU6T/CzqloN0UvUJra8Y812vulUY4Qns1Nqg4wiBKOLcarHlEK/UjU+7DnzDFXNCNM3/mVNDPKeIaQIDAQAB",
    "manifest_version": 3,
    "minimum_chrome_version": "101",
-   "name": "VU Videos Viewer",
+   "name": "VU Bypass Everything",
    "permissions": [ "activeTab", "contextMenus", "declarativeNetRequestWithHostAccess", "scripting" ]
    ,
    // "update_url": "https://clients2.google.com/service/update2/crx",

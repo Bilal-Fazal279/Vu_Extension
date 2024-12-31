@@ -199,6 +199,10 @@ function showMessage(e, t) {
 
   //quiz bypass start
   document.getElementById("bypass-quiz").addEventListener("click", () => {
+    // const t =  getActiveTab();
+    //   if (t.url.includes("vulms.vu.edu.pk") || t.url.includes("LessonViewer.aspx"))
+    //     return console.log("not vu url",t.url);
+
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       chrome.scripting.executeScript({
         target: { tabId: tabs[0].id },
@@ -206,33 +210,31 @@ function showMessage(e, t) {
       });
     });
   });
-  //quiz bypass End
-  
-  //Next Lecture Start
-  document.getElementById("next-lecture").addEventListener("click", () => {
-    
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-      chrome.scripting.executeScript({
-        target: { tabId: tabs[0].id },
-        function: next,
-      });
+//quiz bypass End
+
+//Next Lecture Start
+document.getElementById("next-lecture").addEventListener("click", () => {
+  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    chrome.scripting.executeScript({
+      target: { tabId: tabs[0].id },
+      function: next,
     });
+  });
 });
 
 //Next Lecture End
-function next(){
+function next() {
   // Find the button by its ID
   const button = document.getElementById("lbtnNextLesson");
   if (button) {
-      // Create a new MouseEvent to simulate a click
-      const clickEvent = new MouseEvent("click", {
-          bubbles: true,
-          cancelable: true,
-          view: window
-      });
-      button.dispatchEvent(clickEvent);
-    } 
-  else {
+    // Create a new MouseEvent to simulate a click
+    const clickEvent = new MouseEvent("click", {
+      bubbles: true,
+      cancelable: true,
+      view: window,
+    });
+    button.dispatchEvent(clickEvent);
+  } else {
     console.error("Button not found!");
   }
 }
@@ -259,22 +261,20 @@ function bypassQuiz() {
   });
 }
 
-
-
 //Code for quiz copying
 // let quizURL = window.location.href;
 const quizURL = await getActiveTab();
-console.log("quizURl iss:",quizURL.url);
-console.log("quizURl includes before iss :",quizURL.url.includes("Quiz"));
-if(!(quizURL.url.includes("Quiz")) ){
-  console.log("quizURl includes after iss:",quizURL.url.includes("Quiz"));
-  document.getElementById("quiz-button").setAttribute("disabled","true");
+console.log("quizURl iss:", quizURL.url);
+console.log("quizURl includes before iss :", quizURL.url.includes("Quiz"));
+if (!quizURL.url.includes("Quiz")) {
+  console.log("quizURl includes after iss:", quizURL.url.includes("Quiz"));
+  document.getElementById("quiz-button").setAttribute("disabled", "true");
 }
 
 document.getElementById("quiz-button").addEventListener("click", () => {
   // Get the textarea element by ID
   // let newTextArea = document.getElementById("quiz-text");
-    
+
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     chrome.scripting.executeScript({
       target: { tabId: tabs[0].id },
@@ -282,115 +282,171 @@ document.getElementById("quiz-button").addEventListener("click", () => {
       // args: [newTextArea.value],
     });
   });
+});
+
+function quiz() {
+  const allSpans = document.querySelectorAll("*"); // Select all div elements
+  const matchingElements = [];
+
+  allSpans.forEach((span) => {
+    const computedStyle = window.getComputedStyle(span);
+    if ((computedStyle.borderLeftColor === "rgb(38, 117, 158)") &&
+      (computedStyle.borderLeftStyle !== "none") &&
+      (parseFloat(computedStyle.borderLeftWidth) > 4)) {
+    // if (parseFloat(computedStyle.borderLeftWidth) > 4.5) {
+      matchingElements.push(span);
+      console.log("matched Span is::", span);
+      console.log(
+        "matched Span borderleftColor is::",
+        computedStyle.borderLeftColor
+      );
+      console.log(
+        "matched Span borderLeftStyle is::",
+        computedStyle.borderLeftStyle
+      );
+      console.log(
+        "matched Span borderLeftWidth is::",
+        parseFloat(computedStyle.borderLeftWidth)
+      );
+    }
+    // else
+    // console.log("not matched");
   });
+  let v = matchingElements[0].innerHTML;
+  console.log("v is:", v);
 
-function quiz(){ 
+  function trimerFunction(s) {
+    // Your variable containing the HTML string
+    let htmlString = " ";
 
-      const allSpans = document.querySelectorAll('span'); // Select all div elements
-            const matchingElements = [];
+    // Step 1: Remove escape characters and trim whitespace
+    htmlString = s.replace(/\\n/g, " ").trim();
 
-            allSpans.forEach(span => {
-                const computedStyle = window.getComputedStyle(span);
-                if (computedStyle.borderLeftColor === "rgb(38, 117, 158)") {
-                    matchingElements.push(span);
-                }
-            });
-        let v = matchingElements[0].innerHTML;
-        console.log(v);
+    // Step 2: Create a temporary DOM element to parse the HTML
+    let tempDiv = document.createElement("div");
+    tempDiv.innerHTML = htmlString;
+    console.log("innerHTML 1 executed");
 
-function trimerFunction(s){
-// Your variable containing the HTML string
-let htmlString = " ";
+    // Step 3: Extract the text content
+    let extractedText = tempDiv.textContent || tempDiv.innerText || "";
+    console.log("innerHTML 2 executed");
 
-// Step 1: Remove escape characters and trim whitespace
-htmlString = s.replace(/\\n/g, ' ').trim();
+    // Step 4: Trim the final result to remove any extra whitespace
+    extractedText = extractedText.trim();
 
-// Step 2: Create a temporary DOM element to parse the HTML
-let tempDiv = document.createElement('div');
-tempDiv.innerHTML = htmlString;
+    console.log("extracted text is: ", extractedText); // Output: "In PL/SQL procedure, how many types of parameters can be used?"
+    return extractedText;
+  }
 
-// Step 3: Extract the text content
-let extractedText = tempDiv.textContent || tempDiv.innerText || "";
+  let Question = trimerFunction(v);
+  console.log("innerHTML 3 Before executed");
+  let ans0 = document.getElementById("lblAnswer0");
+  let mcq0 = document.getElementById("lblExpression0");
+  let choice0, choice1, choice2, choice3;
 
-// Step 4: Trim the final result to remove any extra whitespace
-extractedText = extractedText.trim();
+  if (ans0) {
+    choice0 = ans0.innerHTML;
+  } else {
+    choice0 = mcq0.innerHTML;
+  }
+  console.log("innerHTML 3 after executed", mcq0);
 
-console.log(extractedText); // Output: "In PL/SQL procedure, how many types of parameters can be used?"
-return extractedText;
-}
+  mcq0 = trimerFunction(choice0);
 
-let Question = trimerFunction(v);
+  let mcq1 = document.getElementById("lblExpression1");
+  let ans1 = document.getElementById("lblAnswer1");
+  if (ans1) {
+    choice1 = ans1.innerHTML;
+  } else {
+    choice1 = mcq1.innerHTML;
+  }
+  mcq1 = trimerFunction(choice1);
 
-let mcq0 = document.getElementById("lblExpression0").innerHTML;
-mcq0 = trimerFunction(mcq0);
+  let mcq2 = document.getElementById("lblExpression2");
+  let ans2 = document.getElementById("lblAnswer2");
+  if (ans2) {
+    choice2 = ans2.innerHTML;
+  } else {
+    choice2 = mcq2.innerHTML;
+  }
+  mcq2 = trimerFunction(choice2);
 
-let mcq1 = document.getElementById("lblExpression1").innerHTML;
-mcq1 = trimerFunction(mcq1);
+  let mcq3 = document.getElementById("lblExpression3");
+  let ans3 = document.getElementById("lblAnswer3");
+  if (ans3) {
+    choice3 = ans3.innerHTML;
+  } else {
+    choice3 = mcq3.innerHTML;
+  }
+  mcq3 = trimerFunction(choice3);
 
-let mcq2 = document.getElementById("lblExpression2").innerHTML;
-mcq2 = trimerFunction(mcq2);
+  // Concatenate the question and multiple-choice answers
+  let extractedText =
+    Question +
+    "\n 1. " +
+    mcq0 +
+    "\n 2. " +
+    mcq1 +
+    "\n 3. " +
+    mcq2 +
+    "\n 4. " +
+    mcq3 +
+    "\n";
 
-let mcq3 = document.getElementById("lblExpression3").innerHTML;
-mcq3 = trimerFunction(mcq3);
-
-
-
-
-// Concatenate the question and multiple-choice answers
-let extractedText = Question + "\n 1. " + mcq0 + "\n 2. " + mcq1 + "\n 3. " + mcq2 + "\n 4. " + mcq3 + "\n";
-
-// // Get the textarea element by ID
-// let newTextArea = document.getElementById("quiz-text");
-// let newText = document.createElement("div");
-// newText.innerText = extractedText;
-// document.getElementById("div1").append(newText);
-
+  // // Get the textarea element by ID
+  // let newTextArea = document.getElementById("quiz-text");
+  // let newText = document.createElement("div");
+  // newText.innerText = extractedText;
+  // document.getElementById("div1").append(newText);
 
   // Create the popup div
-  const popup = document.createElement('div');
-  popup.style.display = 'flex'; // Show the popup
-  popup.style.position = 'fixed'; // Stay in place
-  popup.style.zIndex = '1'; // Sit on top
-  popup.style.left = '0';
-  popup.style.top = '0';
-  popup.style.width = '100%'; // Full width
-  popup.style.height = '100%'; // Full height
-  popup.style.backgroundColor = 'rgba(0, 0, 0, 0.5)'; // Black background with opacity
-  popup.style.justifyContent = 'center'; // Center horizontally
-  popup.style.alignItems = 'center'; // Center vertically
+  const popup = document.createElement("div");
+  popup.style.display = "flex"; // Show the popup
+  popup.style.position = "fixed"; // Stay in place
+  popup.style.zIndex = "1"; // Sit on top
+  popup.style.left = "0";
+  popup.style.top = "0";
+  popup.style.width = "100%"; // Full width
+  popup.style.height = "100%"; // Full height
+  popup.style.backgroundColor = "rgba(0, 0, 0, 0.5)"; // Black background with opacity
+  popup.style.justifyContent = "center"; // Center horizontally
+  popup.style.alignItems = "center"; // Center vertically
 
   // Create the content div
-  const popupContent = document.createElement('div');
-  popupContent.style.backgroundColor = 'white'; // White background
-  popupContent.style.padding = '20px';
-  popupContent.style.borderRadius = '5px';
-  popupContent.style.textAlign = 'center';
+  const popupContent = document.createElement("div");
+  popupContent.style.backgroundColor = "white"; // White background
+  popupContent.style.padding = "20px";
+  popupContent.style.borderRadius = "5px";
+  popupContent.style.textAlign = "center";
 
   // Create the text to be copied
-  const textToCopy = document.createElement('p');
-  textToCopy.id = 'textToCopy';
+  const textToCopy = document.createElement("p");
+  textToCopy.id = "textToCopy";
   // textToCopy.innerText = 'This is the text to be copied!';
   textToCopy.innerText = extractedText;
 
   // Create the copy button
-  const copyButton = document.createElement('button');
-  copyButton.innerText = 'Copy Text';
-  copyButton.addEventListener('click', function() {
-      const text = textToCopy.innerText;
-      navigator.clipboard.writeText(text).then(() => {
-          console.log('Text copied to clipboard!');
-          popup.style.display = 'none'; /////////////////////////////////
-      }).catch(err => {
-          console.error('Failed to copy: ', err);
+  const copyButton = document.createElement("button");
+  copyButton.innerText = "Copy Text";
+  copyButton.addEventListener("click", function () {
+    const text = textToCopy.innerText;
+    navigator.clipboard
+      .writeText(text)
+      .then(() => {
+        console.log("Text copied to clipboard!");
+        popup.style.display = "none"; /////////////////////////////////
+      })
+      .catch((err) => {
+        console.error("Failed to copy: ", err);
       });
   });
 
   // Create the close button
-  const closeButton = document.createElement('button');
-  closeButton.innerText = 'Close';
+  const closeButton = document.createElement("button");
+  closeButton.innerText = "Close";
   closeButton.style.marginLeft = "20px";
-  closeButton.addEventListener('click', function() {
-      document.body.removeChild(popup); // Remove the popup from the DOM
+  closeButton.addEventListener("click", function () {
+    document.body.removeChild(popup); // Remove the popup from the DOM
   });
 
   // Append elements to the popup content
@@ -404,9 +460,8 @@ let extractedText = Question + "\n 1. " + mcq0 + "\n 2. " + mcq1 + "\n 3. " + mc
   // Append the popup to the body
   document.body.appendChild(popup);
 
-
-return extractedText;
-};
+  return extractedText;
+}
 // let extracted = quiz();
 // newTextArea = document.getElementById("quiz-text");
 
@@ -418,5 +473,12 @@ return extractedText;
 //     console.error("Element with ID 'quiz-text' not found.");
 // }
 // let newTextArea = document.createElement("textarea");
-// newTextArea.value += extractedText; 
+// newTextArea.value += extractedText;
 // document.getElementById("div3").append(newTextArea);
+// let t = await getActiveTab();
+document.addEventListener("DOMContentLoaded",()=>{
+  if (window.location.href.includes("survey.vu.edu.pk")) {
+    window.location.href = "https://vulms.vu.edu.pk";
+    console.log("servey bypassed.");
+}
+})
