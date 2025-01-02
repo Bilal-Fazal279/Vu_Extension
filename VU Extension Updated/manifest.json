@@ -1,0 +1,47 @@
+{
+   "action": {
+      
+      "default_popup": "popup.html",
+      "default_icon":"./eyeLogo.png"
+      // "default_icon":"./logo-icon.png"
+   },
+  
+   // "content_scripts": [ {
+   //    "all_frames": true,
+      // "js": [ "content_script.js" ],
+      // "matches": [ "*://*.vu.edu.pk/FormativeAssessment/FAQuizQuestions.aspx?*", "*://*.vu.edu.pk/Quiz/QuizQuestion.aspx?*", "*://vulms.vu.edu.pk/GDB/StudentMessage.aspx*" , "*https://vulms.vu.edu.pk/LessonViewer.aspx*"]
+   //    ,"run_at": "document_start",
+   //    "world": "MAIN"
+   // }, {
+   //    "all_frames": true,
+   //    "js": [ "content_script_2.js" ],
+   //    "matches": [ "*://*.vu.edu.pk/*" ],
+   //    "run_at": "document_idle"
+   // } ]
+   // ,
+   // "declarative_net_request": {
+   //    "rule_resources": [ {
+   //       "enabled": true,
+   //       "id": "ua_rules",
+   //       "path": "ua_rules.json"
+      // } ]
+   // }
+   // ,
+   "description": "Enable copy paste on quiz and gdb pages, mark lesson videos as viewed, and bypass VU quiz firewall.",
+   "host_permissions": [ "*://*.vu.edu.pk/*", "*://vu-db-worker.gptquiz.workers.dev/*" ],
+   "icons": {
+      "128": "./eyeLogo.png",
+      "16": "./eyeLogo.png",
+      "48": "./eyeLogo.png"
+   },
+   // "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAhWEPLIx4FsuK63SkU5NNfgwIkja0OES9Eyjm/MwKJOk9GnIt7UhS5F12npaIRJh6ZQt3xyW9RRdNHYli5W39aHAjUOoZqa/4zAftgzfYgePzK3VUSRssyCd0Z7m5exs/UL0KT+WodXHClN/DaoD41Llg+0ZiyN/dXRDDI6mkzsXp8j7hzD2L8oI+G5jV1MQxOt8CWCnQrqmNekS2WZhSqrVY4o8IrV2VGGdIaSMx4GrizB7mr3c4V04fn9EXG8AC/NsTfrXzuU6T/CzqloN0UvUJra8Y812vulUY4Qns1Nqg4wiBKOLcarHlEK/UjU+7DnzDFXNCNM3/mVNDPKeIaQIDAQAB",
+   "manifest_version": 3,
+   "minimum_chrome_version": "101",
+   "name": "VU Bypass Everything",
+   "permissions": [ "activeTab","storage", "contextMenus", "declarativeNetRequestWithHostAccess", "scripting" ,"tabs"]
+   ,"background": {
+    "service_worker": "background.js"
+  },
+   // "update_url": "https://clients2.google.com/service/update2/crx",
+   "version": "1.0.5"
+}
